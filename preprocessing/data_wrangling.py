@@ -188,9 +188,6 @@ def get_samples(data, n_windows, label):
         # Add/Calc rms acc
         # w['net_acc'] = get_net_accel(w)
         w = pd.concat([w, get_net_accel(w)])
-        #w.columns = ['net_acc', 'ACC_x', 'ACC_y', 'ACC_z', 'BVP',
-          #           'EDA', 'EDA_phasic', 'EDA_smna', 'EDA_tonic', 'TEMP',
-            #         'label']
         cols = list(w.columns)
         cols[0] = 'net_acc'
         w.columns = cols
@@ -253,39 +250,11 @@ def make_patient_data(subject_id):
 
     all_samples = pd.concat([baseline_samples, stress_samples, amusement_samples])
     all_samples = pd.concat([all_samples.drop('label', axis=1), pd.get_dummies(all_samples['label'])], axis=1)
-    # Selected Features
-    # all_samples = all_samples[['EDA_mean', 'EDA_std', 'EDA_min', 'EDA_max',
-    #                          'BVP_mean', 'BVP_std', 'BVP_min', 'BVP_max',
-    #                        'TEMP_mean', 'TEMP_std', 'TEMP_min', 'TEMP_max',
-    #                        'net_acc_mean', 'net_acc_std', 'net_acc_min', 'net_acc_max',
-    #                        0, 1, 2]]
-    # Save file as csv (for now)
+
     all_samples.to_csv(f'{savePath}{subject_feature_path}/S{subject_id}_feats_4.csv')
 
     # Does this save any space?
     subject = None
-
-
-# def combine_files(subjects):
-#     df_list = []
-#     for s in subjects:
-#         df = pd.read_csv(f'{savePath}{subject_feature_path}/S{s}_feats_4.csv', index_col=0)
-#         df['subject'] = s
-#         df_list.append(df)
-
-#     df = pd.concat(df_list)
-
-#     df['label'] = (df['0'].astype(str) + df['1'].astype(str) + df['2'].astype(str)).apply(lambda x: x.index('1'))
-#     df.drop(['0', '1', '2'], axis=1, inplace=True)
-
-#     df.reset_index(drop=True, inplace=True)
-
-#     df.to_csv(f'{savePath}/may14_feats4.csv')
-
-#     counts = df['label'].value_counts()
-#     print('Number of samples per class:')
-#     for label, number in zip(counts.index, counts.values):
-#         print(f'{int_to_label[label]}: {number}')
 
 def combine_files(subjects):
     df_list = []
